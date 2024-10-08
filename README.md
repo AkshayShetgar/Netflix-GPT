@@ -12,7 +12,11 @@
 - Deployed app to production
 - Created a Sign up user account
 - Implemented sign in user api
-- Created Redux Store with userSlice
+- Created Redux Store with userSlice & moviesslice
+- Get data from TMDB now playing movies list API
+- created custom hooks
+- 
+
 
 
 # Features
