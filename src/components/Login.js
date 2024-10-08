@@ -1,25 +1,29 @@
 import { useState, useRef } from "react";
 import Header from "./Header";
 import { validteFormData } from "../utils/validate";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import useOnlineStatus from "../utils/useOnlineStatus";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
+import { BACK_IMG } from "../utils/constant";
 
 const Login = () => {
+
   const [isSignIn, setIsSignIn] = useState(true);
 
   const [errMessage, setErrMessage] = useState(null);
+  
+  const dispatch = useDispatch();
 
+  const name = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
-  const name = useRef(null);
 
   const handleValidationData = () => {
-    const nameVal = isSignIn ? "" : name.current.value;
     const data = validteFormData(
       email.current.value,
       password.current.value,
-      nameVal
     );
     setErrMessage(data);
 
@@ -33,7 +37,14 @@ const Login = () => {
       )
         .then((userCredential) => {
           const user = userCredential.user;
-          console.log(user);
+          updateProfile(user, {
+            displayName: name.current.value, photoURL : "https://avatars.githubusercontent.com/u/90634309?v=4",
+          }).then(() => {
+            const {uid, email, displayName, photoURL} = auth.currentUser;
+            dispatch(addUser({uid : uid, email : email, displayName : displayName, photoURL : photoURL}));
+          }).catch((error) => {
+            setErrMessage(error.message);
+          });
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -45,7 +56,6 @@ const Login = () => {
         password.current.value)
         .then((userCredential) => {
           const user = userCredential.user;
-          console.log(user);
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -68,7 +78,7 @@ const Login = () => {
       <Header />
       <div className="absolute">
         <img
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/4d2c5849-b306-4884-9036-6211f7ee0178/web/IN-en-20240930-TRIFECTA-perspective_1e1ca6cd-9e2d-4e9d-9e4b-ba0c2d3a0e31_large.jpg"
+          src={BACK_IMG}
           alt="background-img"
         />
       </div>
@@ -81,7 +91,7 @@ const Login = () => {
         </h1>
         {!isSignIn && (
           <input
-            ref={name}
+          ref={name}
             className="p-3.5 my-2 rounded-sm w-full bg-gray-700 text-white"
             type="text"
             placeholder="Full Name"
