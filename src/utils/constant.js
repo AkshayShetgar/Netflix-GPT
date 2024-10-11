@@ -13,3 +13,25 @@ export const API_OPTIONS = {
   };
 
   export const POSTER_CDN = "https://image.tmdb.org/t/p/w400/";
+
+  export const languages = {
+    en : {
+      search : "Search",
+      gptSearchPlaceholder : "Search movies you want to watch",
+    },
+    hindi : {
+      search : "खोज",
+      gptSearchPlaceholder : "फ़िल्में खोजें जिन्हें आप देखना चाहते हैं",
+    },
+    kannada : {
+      search : "ಹುಡುಕು",
+      gptSearchPlaceholder : "ನೀವು ವೀಕ್ಷಿಸಲು ಬಯಸುವ ಚಲನಚಿತ್ರಗಳನ್ನು ಹುಡುಕಿ",
+    },
+  };
+
+
+  export const SUPPORTED_LANG = [
+    {value : "en", name : 'English'},
+    {value : "hindi", name : 'Hindi'},
+    {value : "kannada", name : 'Kannada'},
+  ];
